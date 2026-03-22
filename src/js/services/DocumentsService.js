@@ -57,7 +57,7 @@ export const getDocument = (documentId) => {
   );
 }
 
-export const createDocument = (payload) => {
+export const createDocument = (payload, options = {}) => {
   const formData = new FormData();
   formData.append("name", payload.name || "");
   if (payload.description !== undefined) {
@@ -74,12 +74,14 @@ export const createDocument = (payload) => {
     `${API_BASE_URL}/documents`,
     formData,
     {
-      headers: buildFileUploadHeaders()
+      headers: buildFileUploadHeaders(),
+      onUploadProgress: options.onUploadProgress,
+      timeout: options.timeout,
     }
   );
 }
 
-export const updateDocument = (documentId, payload) => {
+export const updateDocument = (documentId, payload, options = {}) => {
   const formData = new FormData();
   if (payload.name !== undefined) {
     formData.append("name", payload.name || "");
@@ -98,7 +100,9 @@ export const updateDocument = (documentId, payload) => {
     `${API_BASE_URL}/documents/${documentId}`,
     formData,
     {
-      headers: buildFileUploadHeaders()
+      headers: buildFileUploadHeaders(),
+      onUploadProgress: options.onUploadProgress,
+      timeout: options.timeout,
     }
   );
 }
