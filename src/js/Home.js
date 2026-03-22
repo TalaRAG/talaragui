@@ -33,7 +33,7 @@ export default Home = () => {
   const [documentTypeOptions, setDocumentTypeOptions] = useState([]);
   const [selectedDocumentTypes, setSelectedDocumentTypes] = useState({});
   const [isConfigLoading, setIsConfigLoading] = useState(true);
-  const [topK, setTopK] = useState(5);
+  const [topK, setTopK] = useState(100);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -172,7 +172,7 @@ export default Home = () => {
         body: JSON.stringify({
           query,
           document_types: selectedTypesList,
-          k: Number(topK) || 5
+          k: Number(topK) || 100
         }),
         signal: controller.signal
       });
