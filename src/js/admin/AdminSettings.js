@@ -6,6 +6,7 @@ import { getEnvironment } from "../services/SystemService";
 
 export default AdminSettings = () => {
   const [variables, setVariables] = useState([]);
+  const [secretStatuses, setSecretStatuses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,11 +18,16 @@ export default AdminSettings = () => {
       const entries = Object.entries(payload.data.variables || {}).sort(([left], [right]) => {
         return left.localeCompare(right);
       });
+      const secretEntries = Object.entries(payload.data.secret_statuses || {}).sort(([left], [right]) => {
+        return left.localeCompare(right);
+      });
       setVariables(entries);
+      setSecretStatuses(secretEntries);
     }).catch((payload) => {
       console.log("Failed to load environment settings");
       console.log(payload.response);
       setVariables([]);
+      setSecretStatuses([]);
       setErrorMessage("Unable to load backend environment settings.");
     }).finally(() => {
       setIsLoading(false);
@@ -48,6 +54,39 @@ export default AdminSettings = () => {
         }
 
         {!isLoading && !errorMessage &&
+          <React.Fragment>
+            <div className="table-responsive mb-4">
+              <table className="table table-striped align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">Secret</th>
+                    <th scope="col">Configured</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {secretStatuses.length === 0 &&
+                    <tr>
+                      <td colSpan="2" className="text-center text-muted">
+                        No secret status information available.
+                      </td>
+                    </tr>
+                  }
+                  {secretStatuses.map(([key, configured]) => (
+                    <tr key={key}>
+                      <td className="fw-semibold">
+                        <code>{key}</code>
+                      </td>
+                      <td>
+                        <span className={`badge text-bg-${configured ? "success" : "danger"}`}>
+                          {configured ? "SET" : "MISSING"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
           <div className="table-responsive">
             <table className="table table-striped align-middle mb-0">
               <thead>
@@ -77,6 +116,7 @@ export default AdminSettings = () => {
               </tbody>
             </table>
           </div>
+          </React.Fragment>
         }
       </AdminContent>
     </Layout>

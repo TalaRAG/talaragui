@@ -91,7 +91,12 @@ export default UsersForm = () => {
           )
         ]}
       >
-        {isLoading && <Loader/>}
+        {isLoading &&
+          <Loader
+            label="Loading user details"
+            hint="Fetching the current user record so the form fields can be populated."
+          />
+        }
 
         {!isLoading && notFound &&
           <div className="text-muted">
@@ -165,7 +170,13 @@ export default UsersForm = () => {
                 disabled={isSaving}
                 onClick={handleSubmit}
               >
-                {isEdit ? "Update User" : "Create User"}
+                {isSaving
+                  ? isEdit
+                    ? "Updating User..."
+                    : "Creating User..."
+                  : isEdit
+                    ? "Update User"
+                    : "Create User"}
               </button>
               <button
                 className="btn btn-outline-secondary"

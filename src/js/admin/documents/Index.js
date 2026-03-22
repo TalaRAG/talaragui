@@ -44,6 +44,8 @@ export default DocumentsIndex = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const isInitialLoad = isLoading && documents.length === 0;
+  const isRefreshing = isLoading && documents.length > 0;
 
   const fetchDocuments = () => {
     setIsLoading(true);
@@ -131,9 +133,26 @@ export default DocumentsIndex = () => {
           </div>
         </div>
 
-        {isLoading && <Loader/>}
+        {isRefreshing &&
+          <div className="loading-banner">
+            <div className="loading-banner-copy">
+              <div className="loading-banner-title">Refreshing document list</div>
+              <div className="loading-banner-text">
+                Fetching updated archive records for the current page and filters.
+              </div>
+            </div>
+            <Loader compact label="" />
+          </div>
+        }
 
-        {!isLoading &&
+        {isInitialLoad &&
+          <Loader
+            label="Loading documents"
+            hint="Requesting archive metadata and processing status from the backend."
+          />
+        }
+
+        {!isInitialLoad &&
           <div className="table-responsive">
             <table className="table table-striped align-middle">
               <thead>

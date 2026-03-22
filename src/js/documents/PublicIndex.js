@@ -68,6 +68,8 @@ export default PublicDocumentsIndex = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isConfigLoading, setIsConfigLoading] = useState(true);
+  const isInitialLoad = isLoading && documents.length === 0;
+  const isRefreshing = isLoading && documents.length > 0;
 
   const fetchDocuments = () => {
     setIsLoading(true);
@@ -203,6 +205,9 @@ export default PublicDocumentsIndex = () => {
                       </option>
                     ))}
                   </select>
+                  {isConfigLoading &&
+                    <div className="form-text">Loading archive categories...</div>
+                  }
                 </div>
               </div>
             </div>
@@ -210,9 +215,26 @@ export default PublicDocumentsIndex = () => {
 
           <section className="surface-panel">
             <div className="surface-panel-body">
-              {isLoading && <Loader/>}
+              {isRefreshing &&
+                <div className="loading-banner">
+                  <div className="loading-banner-copy">
+                    <div className="loading-banner-title">Refreshing public archive results</div>
+                    <div className="loading-banner-text">
+                      Fetching the latest records for your current search and filter selections.
+                    </div>
+                  </div>
+                  <Loader compact label="" />
+                </div>
+              }
 
-              {!isLoading &&
+              {isInitialLoad &&
+                <Loader
+                  label="Loading public archives"
+                  hint="Fetching documents and availability details for the selected view."
+                />
+              }
+
+              {!isInitialLoad &&
                 <div className="table-responsive">
                   <table className="table align-middle document-table">
                     <thead>

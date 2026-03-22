@@ -10,6 +10,7 @@ import {
   faStop
 } from "@fortawesome/free-solid-svg-icons";
 import { generateRandomUUID } from "./helpers/AppHelper";
+import Loader from "./commons/Loader";
 
 const MAX_CONTEXT_MESSAGES = 8;
 
@@ -238,7 +239,9 @@ export default Home = () => {
     }));
   };
 
-  const primaryDocumentType = selectedTypesList[0];
+  const selectedCollectionsLabel = selectedTypesList.length === 1
+    ? formatDocumentTypeLabel(selectedTypesList[0])
+    : `${selectedTypesList.length} archives selected`;
 
   return (
     <div className="talarag-chat-page">
@@ -272,25 +275,19 @@ export default Home = () => {
               I&apos;m your AI-powered cultural and data concierge, trained to help
               you navigate through complex Filipino archives and modern datasets.
             </p>
-            <div className="public-sidebar-meta">
-              <span className="public-meta-pill">
-                <span className="chip-dot" />
-                {isConfigLoading
-                  ? "Loading archives"
-                  : primaryDocumentType
-                    ? formatDocumentTypeLabel(primaryDocumentType)
-                    : "No archive selected"}
-              </span>
-              <span className="public-meta-pill">
-                <span className="chip-dot" />
-                Top K: {topK}
-              </span>
-              <a className="public-meta-pill text-decoration-none" href="/#/documents">
-                <span className="chip-dot" />
-                Browse archives
-              </a>
-            </div>
           </section>
+
+          {isConfigLoading &&
+            <div className="loading-banner">
+              <div className="loading-banner-copy">
+                <div className="loading-banner-title">Loading archives and retrieval settings</div>
+                <div className="loading-banner-text">
+                  TalaRAG is fetching the available collections before it can ground responses in source documents.
+                </div>
+              </div>
+              <Loader compact label="" />
+            </div>
+          }
 
           <div className="chat-scroll-area">
             <div className="chat-thread">
@@ -343,7 +340,9 @@ export default Home = () => {
                                 {message.content}
                               </ReactMarkdown>
                             ) : (
-                              message.isStreaming ? "…" : ""
+                              <span className="assistant-thinking">
+                                {isLoading ? "Gathering source passages..." : ""}
+                              </span>
                             )}
                           </div>
                         </div>
@@ -355,6 +354,16 @@ export default Home = () => {
               <div ref={messagesEndRef} />
             </div>
           </div>
+
+          {isLoading ? (
+            <div className="composer-status">
+              <Loader
+                compact
+                label="Searching documents and preparing a response"
+                hint={`Current scope: ${selectedCollectionsLabel}.`}
+              />
+            </div>
+          ) : null}
 
           {error ? (
             <div className="soft-alert" role="alert">
@@ -371,7 +380,13 @@ export default Home = () => {
                   value={input}
                   onChange={(event) => setInput(event.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask TalaRAG a question…"
+                  placeholder={
+                    isConfigLoading
+                      ? "Loading archives before you can ask a question..."
+                      : isLoading
+                        ? "TalaRAG is preparing a response..."
+                        : "Ask TalaRAG a question…"
+                  }
                 />
                 <div className="composer-actions">
                   <button
@@ -403,6 +418,37 @@ export default Home = () => {
                 </div>
               </div>
 
+              <div className="composer-toolbar">
+                <div className="composer-collections">
+                  <div className="composer-toolbar-label">Collections</div>
+                  {isConfigLoading ? (
+                    <div className="text-muted small">Loading document types…</div>
+                  ) : (
+                    <div className="document-toggle-grid">
+                      {documentTypeOptions.map((type) => {
+                        const isSelected = !!selectedDocumentTypes[type];
+                        return (
+                          <button
+                            key={type}
+                            type="button"
+                            className={`document-toggle ${isSelected ? "is-selected" : ""}`}
+                            onClick={() => handleToggleDocumentType(type)}
+                            aria-pressed={isSelected}
+                          >
+                            <span className="document-toggle-indicator" aria-hidden="true" />
+                            {formatDocumentTypeLabel(type)}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                <a className="composer-link" href="/#/documents">
+                  Browse archives
+                </a>
+              </div>
+
               {showAdvanced ? (
                 <div className="composer-advanced">
                   <div className="composer-settings-grid">
@@ -415,26 +461,6 @@ export default Home = () => {
                         value={topK}
                         onChange={(event) => setTopK(event.target.value)}
                       />
-                    </div>
-                    <div>
-                      <div className="form-label text-muted small">Document Collections</div>
-                      {isConfigLoading ? (
-                        <div className="text-muted small">Loading document types…</div>
-                      ) : (
-                        <div className="document-chip-grid">
-                          {documentTypeOptions.map((type) => (
-                            <button
-                              key={type}
-                              type="button"
-                              className={`document-chip ${selectedDocumentTypes[type] ? "is-selected" : ""}`}
-                              onClick={() => handleToggleDocumentType(type)}
-                            >
-                              <span className="chip-dot" />
-                              {formatDocumentTypeLabel(type)}
-                            </button>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>

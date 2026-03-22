@@ -129,7 +129,12 @@ export default DocumentsForm = () => {
           )
         ]}
       >
-        {isLoading && <Loader/>}
+        {isLoading &&
+          <Loader
+            label="Loading document details"
+            hint="Fetching the current document record so the form can be populated."
+          />
+        }
 
         {!isLoading && notFound &&
           <div className="text-muted">
@@ -180,6 +185,9 @@ export default DocumentsForm = () => {
                   </option>
                 ))}
               </select>
+              {isConfigLoading &&
+                <div className="form-text">Loading document type options...</div>
+              }
               {renderInputErrors(errors, "document_type")}
             </div>
 
@@ -196,6 +204,9 @@ export default DocumentsForm = () => {
                 disabled={isSaving}
                 onChange={(event) => setFile(event.target.files[0])}
               />
+              {isSaving &&
+                <div className="form-text">Uploading file and saving document metadata...</div>
+              }
               {renderInputErrors(errors, "file")}
             </div>
 
@@ -205,7 +216,13 @@ export default DocumentsForm = () => {
                 disabled={isSaving}
                 onClick={handleSubmit}
               >
-                {isEdit ? "Update Document" : "Create Document"}
+                {isSaving
+                  ? isEdit
+                    ? "Updating Document..."
+                    : "Creating Document..."
+                  : isEdit
+                    ? "Update Document"
+                    : "Create Document"}
               </button>
               <button
                 className="btn btn-outline-secondary"

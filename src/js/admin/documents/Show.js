@@ -101,7 +101,7 @@ export default DocumentsShow = () => {
         title="Document Details"
         headerActions={[
           (
-            document?.status === "pending"
+            ["pending", "failed"].includes(document?.status)
               ? (
                 <button
                   key="rerun-document"

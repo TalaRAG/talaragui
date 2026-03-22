@@ -29,6 +29,8 @@ export default UsersIndex = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const isInitialLoad = isLoading && users.length === 0;
+  const isRefreshing = isLoading && users.length > 0;
 
   const fetchUsers = () => {
     setIsLoading(true);
@@ -121,9 +123,26 @@ export default UsersIndex = () => {
           </div>
         </div>
 
-        {isLoading && <Loader/>}
+        {isRefreshing &&
+          <div className="loading-banner">
+            <div className="loading-banner-copy">
+              <div className="loading-banner-title">Refreshing users</div>
+              <div className="loading-banner-text">
+                Fetching updated account records for the current search, status filter, and page.
+              </div>
+            </div>
+            <Loader compact label="" />
+          </div>
+        }
 
-        {!isLoading &&
+        {isInitialLoad &&
+          <Loader
+            label="Loading users"
+            hint="Requesting account data and status information from the backend."
+          />
+        }
+
+        {!isInitialLoad &&
           <div className="table-responsive">
             <table className="table table-striped align-middle">
               <thead>
