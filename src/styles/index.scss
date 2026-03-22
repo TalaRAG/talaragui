@@ -1,0 +1,610 @@
+@use "../../node_modules/bootstrap/scss/bootstrap.scss" as bootstrap;
+@use "./variables.scss" as variables;
+@use "./bootstrap-overrides" as bootstrap-overrides;
+@use "./Login" as Login;
+@use "./Sidebar" as Sidebar;
+
+.talarag-shell {
+  min-height: 100vh;
+  display: flex;
+  background:
+    radial-gradient(circle at top left, rgba(236, 195, 0, 0.18), transparent 24%),
+    radial-gradient(circle at right, rgba(47, 115, 246, 0.08), transparent 28%),
+    variables.$surface-bright;
+}
+
+.talarag-chat-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at top left, rgba(236, 195, 0, 0.18), transparent 24%),
+    radial-gradient(circle at right, rgba(47, 115, 246, 0.08), transparent 28%),
+    variables.$surface-bright;
+}
+
+.chat-page-shell {
+  height: calc(100vh - 4rem);
+  max-width: 88rem;
+  margin: 0 auto;
+  border-radius: 2.25rem;
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: variables.$shadow-soft;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.public-sidebar {
+  width: 280px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  background: variables.$surface-container-low;
+  backdrop-filter: blur(20px);
+  box-shadow: 6px 0 28px rgba(0, 37, 118, 0.05);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.public-sidebar--collapsed {
+  width: 92px;
+}
+
+.public-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.public-brand-mark,
+.assistant-avatar {
+  width: 2.6rem;
+  height: 2.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.95rem;
+  color: #fff;
+  background: linear-gradient(135deg, variables.$primary 0%, variables.$primary-container 100%);
+  box-shadow: 0 14px 32px rgba(0, 56, 168, 0.18);
+}
+
+.public-brand-copy {
+  min-width: 0;
+}
+
+.public-brand-name {
+  font-family: variables.$font-headline;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: variables.$primary;
+  line-height: 1.1;
+}
+
+.public-brand-tagline {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: variables.$on-surface-muted;
+  font-weight: 700;
+}
+
+.public-sidebar--collapsed .public-brand-copy,
+.public-sidebar--collapsed .public-nav-label,
+.public-sidebar--collapsed .public-sidebar-note,
+.public-sidebar--collapsed .public-sidebar-meta {
+  display: none;
+}
+
+.public-sidebar-toggle {
+  position: absolute;
+  top: 3.8rem;
+  right: -0.85rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 999px;
+  background: variables.$surface-container-lowest;
+  color: variables.$primary;
+  box-shadow: 0 8px 20px rgba(0, 37, 118, 0.1);
+}
+
+.public-new-consultation {
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.5rem;
+}
+
+.public-nav {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.public-nav-button {
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  color: variables.$on-surface-muted;
+  background: transparent;
+  text-align: left;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.public-nav-button:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: variables.$primary;
+  transform: translateX(3px);
+}
+
+.public-nav-button.is-active {
+  color: variables.$primary-strong;
+  background: rgba(255, 244, 211, 0.92);
+  box-shadow: 0 14px 32px rgba(236, 195, 0, 0.14);
+}
+
+.public-sidebar-note {
+  margin-top: auto;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 16px 32px rgba(0, 37, 118, 0.06);
+}
+
+.public-sidebar-meta {
+  margin-top: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.public-meta-pill,
+.document-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 0.95rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: variables.$on-surface;
+  font-size: 0.9rem;
+  box-shadow: inset 0 0 0 1px rgba(0, 37, 118, 0.05);
+}
+
+.document-chip {
+  cursor: pointer;
+  text-align: left;
+  border: none;
+}
+
+.document-chip.is-selected {
+  background: rgba(255, 244, 211, 0.95);
+  color: variables.$primary-strong;
+  box-shadow: 0 14px 28px rgba(236, 195, 0, 0.14);
+}
+
+.chip-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: variables.$tertiary;
+}
+
+.public-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.public-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 37, 118, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 37, 118, 0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1), transparent 88%);
+  pointer-events: none;
+}
+
+.public-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding: 0 2rem;
+  background: rgba(249, 249, 251, 0.78);
+  backdrop-filter: blur(16px);
+}
+
+.public-topbar--chat-only {
+  justify-content: flex-start;
+  padding: 0 3rem;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.public-topbar-links,
+.public-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.topbar-link {
+  color: variables.$on-surface-muted;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.topbar-link.is-active,
+.topbar-link:hover {
+  color: variables.$primary;
+}
+
+.topbar-pill {
+  padding: 0.8rem 1.35rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, variables.$primary 0%, variables.$primary-container 100%);
+  box-shadow: 0 14px 28px rgba(0, 56, 168, 0.18);
+}
+
+.public-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  padding: 2.5rem 3rem 10rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.public-content--chat-only {
+  flex: 1;
+  min-height: 0;
+  padding: 2.5rem 3rem 9rem;
+  overflow: hidden;
+}
+
+.hero-copy {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: variables.$font-headline;
+  font-size: clamp(2.4rem, 4.2vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  max-width: 68rem;
+}
+
+.hero-title .accent {
+  color: variables.$primary;
+}
+
+.hero-description {
+  max-width: 58rem;
+  color: variables.$on-surface-muted;
+  font-size: 1.12rem;
+  line-height: 1.7;
+}
+
+.chat-scroll-area {
+  flex: 1;
+  min-height: 0;
+  padding-right: 0.5rem;
+  overflow-y: auto;
+}
+
+.chat-thread {
+  width: 100%;
+  max-width: none;
+}
+
+.chat-turn {
+  margin-bottom: 2rem;
+}
+
+.chat-turn--user {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-bubble {
+  max-width: 70%;
+  padding: 1rem 1.35rem;
+  border-radius: 1.4rem 1.4rem 0.45rem 1.4rem;
+  background: linear-gradient(180deg, rgba(234, 234, 238, 0.95), rgba(228, 229, 235, 0.9));
+  color: variables.$on-surface;
+  box-shadow: 0 14px 30px rgba(26, 28, 29, 0.06);
+}
+
+.assistant-turn {
+  display: grid;
+  grid-template-columns: 2.8rem 1fr;
+  gap: 1rem;
+}
+
+.assistant-body {
+  padding-left: 1.4rem;
+  border-left: 2px solid variables.$primary;
+}
+
+.assistant-copy {
+  color: variables.$on-surface;
+  line-height: 1.8;
+}
+
+.assistant-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.assistant-copy ul,
+.assistant-copy ol {
+  padding-left: 1.2rem;
+}
+
+.assistant-copy li {
+  margin-bottom: 0.55rem;
+}
+
+.assistant-copy pre,
+.assistant-copy code {
+  border-radius: 1rem;
+}
+
+.assistant-copy table {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 16px 32px rgba(0, 37, 118, 0.06);
+}
+
+.assistant-copy th,
+.assistant-copy td {
+  padding: 0.85rem 1rem !important;
+}
+
+.floating-composer {
+  position: absolute;
+  left: 3rem;
+  right: 3rem;
+  bottom: 1.25rem;
+  z-index: 12;
+}
+
+.composer-card {
+  width: 100%;
+  max-width: none;
+  background: rgba(255, 255, 255, 0.86);
+  border-radius: 1.6rem;
+  padding: 0.75rem;
+  box-shadow: variables.$shadow-float;
+  backdrop-filter: blur(18px);
+}
+
+.composer-card:focus-within {
+  box-shadow:
+    0 0 0 3px rgba(236, 195, 0, 0.18),
+    variables.$shadow-float;
+}
+
+.composer-main {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.composer-textarea {
+  border: none;
+  background: transparent;
+  min-height: 3.6rem;
+  max-height: 10rem;
+  resize: none;
+  padding: 0.75rem 1rem;
+  box-shadow: none;
+}
+
+.composer-textarea:focus {
+  box-shadow: none;
+}
+
+.composer-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.icon-button {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  padding: 0;
+}
+
+.composer-advanced {
+  margin-top: 0.8rem;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  background: rgba(243, 243, 245, 0.92);
+}
+
+.composer-settings-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) 1fr;
+  gap: 1rem 1.25rem;
+  align-items: start;
+}
+
+.document-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.supporting-note {
+  margin-top: 0.75rem;
+  color: rgba(93, 98, 112, 0.88);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.soft-alert {
+  max-width: 58rem;
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  color: #7c2535;
+  background: rgba(187, 0, 30, 0.08);
+}
+
+.documents-page {
+  width: 100%;
+  max-width: none;
+}
+
+.surface-panel {
+  background: rgba(255, 255, 255, 0.76);
+  border-radius: 1.75rem;
+  box-shadow: variables.$shadow-soft;
+  backdrop-filter: blur(18px);
+}
+
+.surface-panel-body {
+  padding: 1.5rem;
+}
+
+.insight-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 1.25rem;
+  box-shadow: 0 18px 36px rgba(0, 37, 118, 0.06);
+  overflow: hidden;
+}
+
+.insight-card::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: variables.$secondary;
+}
+
+.document-table thead th {
+  color: variables.$on-surface-muted;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.document-empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: variables.$on-surface-muted;
+}
+
+.documents-page .hero-copy,
+.documents-page .insight-card,
+.documents-page .surface-panel {
+  width: 100%;
+  max-width: none;
+}
+
+.documents-page .hero-description {
+  max-width: 64rem;
+}
+
+@media (max-width: 991px) {
+  .talarag-chat-page {
+    padding: 1rem;
+  }
+
+  .chat-page-shell {
+    height: calc(100vh - 2rem);
+    border-radius: 1.5rem;
+  }
+
+  .talarag-shell {
+    display: block;
+  }
+
+  .public-sidebar,
+  .public-sidebar--collapsed {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .public-sidebar--collapsed .public-brand-copy,
+  .public-sidebar--collapsed .public-nav-label,
+  .public-sidebar--collapsed .public-sidebar-note,
+  .public-sidebar--collapsed .public-sidebar-meta {
+    display: block;
+  }
+
+  .public-sidebar-toggle {
+    display: none;
+  }
+
+  .public-topbar {
+    padding: 0 1rem;
+    flex-wrap: wrap;
+  }
+
+  .public-topbar--chat-only {
+    padding: 0 1rem;
+  }
+
+  .public-content {
+    padding: 1.25rem 1rem 11rem;
+  }
+
+  .public-content--chat-only {
+    padding: 1.25rem 1rem 10rem;
+  }
+
+  .hero-copy {
+    padding-left: 0;
+  }
+
+  .assistant-turn {
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-body {
+    padding-left: 0.9rem;
+  }
+
+  .floating-composer {
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .composer-settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-bubble {
+    max-width: 100%;
+  }
+}

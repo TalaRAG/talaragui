@@ -1,0 +1,135 @@
+@use "./variables.scss" as variables;
+
+:root {
+  --bs-primary: #{variables.$primary};
+  --bs-primary-rgb: 0, 56, 168;
+  --bs-secondary: #{variables.$secondary};
+  --bs-secondary-rgb: 187, 0, 30;
+  --bs-body-font-family: #{variables.$font-body};
+  --bs-body-color: #{variables.$on-surface};
+  --bs-body-bg: #{variables.$surface};
+  --bs-border-radius: 0.75rem;
+  --bs-border-radius-lg: 1rem;
+  --bs-border-radius-xl: 1.5rem;
+  --bs-link-color: #{variables.$primary};
+  --bs-link-hover-color: #{variables.$primary-strong};
+}
+
+body {
+  margin: 0;
+  font-family: variables.$font-body;
+  color: variables.$on-surface;
+  background:
+    radial-gradient(circle at top left, rgba(236, 195, 0, 0.18), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(0, 56, 168, 0.12), transparent 30%),
+    variables.$surface;
+}
+
+h1, h2, h3, h4, h5, h6, .font-headline {
+  font-family: variables.$font-headline;
+}
+
+a {
+  color: inherit;
+}
+
+.form-control,
+.form-select {
+  border: none;
+  border-radius: 1.25rem;
+  background: variables.$surface-container-lowest;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65), 0 8px 24px rgba(0, 37, 118, 0.06);
+  color: variables.$on-surface;
+  min-height: 3rem;
+
+  &:focus {
+    border: none;
+    box-shadow:
+      0 0 0 0.2rem rgba(236, 195, 0, 0.2),
+      0 12px 30px rgba(0, 37, 118, 0.1);
+    background: variables.$surface-container-lowest;
+    color: variables.$on-surface;
+  }
+}
+
+.btn {
+  border: none;
+  border-radius: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, variables.$primary 0%, variables.$primary-container 100%);
+  box-shadow: 0 16px 32px rgba(0, 56, 168, 0.2);
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: linear-gradient(135deg, variables.$primary-strong 0%, variables.$primary 100%) !important;
+    box-shadow: 0 18px 36px rgba(0, 56, 168, 0.25) !important;
+  }
+}
+
+.btn-outline-secondary {
+  background: rgba(255, 255, 255, 0.72);
+  color: variables.$on-surface-muted;
+  box-shadow: inset 0 0 0 1px rgba(0, 37, 118, 0.08);
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: variables.$surface-container-lowest !important;
+    color: variables.$primary !important;
+    box-shadow: inset 0 0 0 1px rgba(0, 37, 118, 0.12) !important;
+  }
+}
+
+.card,
+.modal-content {
+  border: none;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: variables.$shadow-soft;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: rgba(255, 255, 255, 0.56);
+  --bs-table-hover-bg: rgba(0, 56, 168, 0.04);
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 0.5rem 0.7rem;
+}
+
+.pagination {
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.page-item .page-link {
+  border: none;
+  border-radius: 0.9rem;
+  color: variables.$on-surface-muted;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(0, 37, 118, 0.06);
+}
+
+.page-item .page-link.active,
+.page-item.active .page-link {
+  background: linear-gradient(135deg, variables.$primary 0%, variables.$primary-container 100%);
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(0, 56, 168, 0.18);
+}
+
+.page-item .page-link.disabled,
+.page-item.disabled .page-link {
+  background: rgba(255, 255, 255, 0.45);
+  color: rgba(93, 98, 112, 0.5);
+}

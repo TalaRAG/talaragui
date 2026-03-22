@@ -1,0 +1,38 @@
+{
+  "name": "talaragui",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "start": "node build.js --watch --dev",
+    "init-project": "node scripts/init_project.js",
+    "update_version": "node scripts/update_version.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.1",
+    "autoprefixer": "^10.4.23",
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "bootstrap": "^5.3.8",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "esbuild": "^0.27.2",
+    "esbuild-envfile-plugin": "^1.0.7",
+    "esbuild-sass-plugin": "^3.6.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "jwt-decode": "^4.0.0",
+    "react": "^19.2.3",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.2.3",
+    "react-markdown": "^9.1.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.0",
+    "react-router-dom": "^7.13.0"
+  }
+}
