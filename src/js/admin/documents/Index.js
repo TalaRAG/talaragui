@@ -21,6 +21,21 @@ const formatSize = (sizeBytes) => {
   return `${sizeBytes} B`;
 }
 
+const renderStatusBadge = (status) => {
+  const badgeClass = {
+    pending: "secondary",
+    processing: "warning",
+    done: "success",
+    failed: "danger",
+  }[status] || "secondary";
+
+  return (
+    <span className={`badge text-bg-${badgeClass}`}>
+      {(status || "unknown").toUpperCase()}
+    </span>
+  );
+}
+
 export default DocumentsIndex = () => {
   const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
@@ -125,7 +140,7 @@ export default DocumentsIndex = () => {
                 <tr>
                   <th scope="col">Name</th>
                   <th scope="col">Type</th>
-                  <th scope="col">Vectorized</th>
+                  <th scope="col">Status</th>
                   <th scope="col">Original File</th>
                   <th scope="col">Size</th>
                   <th scope="col" className="text-end">Actions</th>
@@ -143,12 +158,7 @@ export default DocumentsIndex = () => {
                   <tr key={`document-${document.id}`}>
                     <td>{document.name}</td>
                     <td>{document.document_type || "-"}</td>
-                    <td>
-                      {document.has_embeddings
-                        ? <span className="badge bg-success">Yes</span>
-                        : <span className="badge bg-secondary">No</span>
-                      }
-                    </td>
+                    <td>{renderStatusBadge(document.status)}</td>
                     <td>{document.original_filename}</td>
                     <td>{formatSize(document.size_bytes)}</td>
                     <td className="text-end">

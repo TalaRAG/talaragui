@@ -21,6 +21,21 @@ const formatSize = (sizeBytes) => {
   return `${sizeBytes} B`;
 }
 
+const renderStatusBadge = (status) => {
+  const badgeClass = {
+    pending: "secondary",
+    processing: "warning",
+    done: "success",
+    failed: "danger",
+  }[status] || "secondary";
+
+  return (
+    <span className={`badge text-bg-${badgeClass}`}>
+      {(status || "unknown").toUpperCase()}
+    </span>
+  );
+}
+
 export default DocumentsShow = () => {
   const { documentId } = useParams();
   const navigate = useNavigate();
@@ -66,6 +81,21 @@ export default DocumentsShow = () => {
       <AdminContent
         title="Document Details"
         headerActions={[
+          (
+            document?.download_url
+              ? (
+                <a
+                  key="download-document"
+                  className="btn btn-sm btn-primary"
+                  href={document.download_url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Download
+                </a>
+              )
+              : null
+          ),
           (
             <button
               key="edit-document"
@@ -113,6 +143,10 @@ export default DocumentsShow = () => {
                   <td>{document.document_type || "-"}</td>
                 </tr>
                 <tr>
+                  <th scope="row">Status</th>
+                  <td>{renderStatusBadge(document.status)}</td>
+                </tr>
+                <tr>
                   <th scope="row">Original Filename</th>
                   <td>{document.original_filename}</td>
                 </tr>
@@ -131,6 +165,26 @@ export default DocumentsShow = () => {
                 <tr>
                   <th scope="row">Storage Key</th>
                   <td className="text-muted">{document.storage_key}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Download</th>
+                  <td>
+                    {document.download_url
+                      ? (
+                        <a
+                          className="btn btn-sm btn-outline-primary"
+                          href={document.download_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Download File
+                        </a>
+                      )
+                      : (
+                        <span className="text-muted">Unavailable</span>
+                      )
+                    }
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">ID</th>

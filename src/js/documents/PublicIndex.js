@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpRightFromSquare,
-  faCircle,
   faMagnifyingGlass,
   faStar
 } from "@fortawesome/free-solid-svg-icons";
@@ -43,6 +42,21 @@ const formatDocumentTypeLabel = (type) => {
     .split("_")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
+}
+
+const renderStatusBadge = (status) => {
+  const badgeClass = {
+    pending: "secondary",
+    processing: "warning",
+    done: "success",
+    failed: "danger",
+  }[status] || "secondary";
+
+  return (
+    <span className={`badge text-bg-${badgeClass}`}>
+      {(status || "unknown").toUpperCase()}
+    </span>
+  );
 }
 
 export default PublicDocumentsIndex = () => {
@@ -205,7 +219,7 @@ export default PublicDocumentsIndex = () => {
                       <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Vectorized</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Description</th>
                         <th scope="col">Size</th>
                         <th scope="col" className="text-end">Action</th>
@@ -223,22 +237,7 @@ export default PublicDocumentsIndex = () => {
                         <tr key={`public-document-${document.id}`}>
                           <td className="fw-semibold">{document.name}</td>
                           <td>{document.document_type ? formatDocumentTypeLabel(document.document_type) : "-"}</td>
-                          <td>
-                            {document.has_embeddings
-                              ? (
-                                <span className="public-meta-pill">
-                                  <FontAwesomeIcon icon={faCircle} className="text-warning" size="2xs" />
-                                  Indexed
-                                </span>
-                              )
-                              : (
-                                <span className="public-meta-pill">
-                                  <FontAwesomeIcon icon={faCircle} className="text-secondary" size="2xs" />
-                                  Pending
-                                </span>
-                              )
-                            }
-                          </td>
+                          <td>{renderStatusBadge(document.status)}</td>
                           <td className="text-muted">{document.description || "-"}</td>
                           <td>{formatSize(document.size_bytes)}</td>
                           <td className="text-end">
