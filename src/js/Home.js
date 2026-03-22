@@ -39,6 +39,7 @@ export default Home = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [activeAbortController, setActiveAbortController] = useState(null);
   const messagesEndRef = useRef(null);
+  const scrollAreaRef = useRef(null);
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -80,10 +81,13 @@ export default Home = () => {
   }, []);
 
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTo({
+        top: scrollAreaRef.current.scrollHeight,
+        behavior: isLoading ? "auto" : "smooth"
+      });
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
   useEffect(() => {
     return () => {
@@ -289,7 +293,7 @@ export default Home = () => {
             </div>
           }
 
-          <div className="chat-scroll-area">
+          <div ref={scrollAreaRef} className="chat-scroll-area">
             <div className="chat-thread">
               {messages.map((message) => {
                 const isUser = message.role === "user";
@@ -306,7 +310,7 @@ export default Home = () => {
                           <FontAwesomeIcon icon={faStar} />
                         </div>
                         <div className="assistant-body">
-                          <div className="assistant-copy">
+                          <div className={`assistant-copy ${message.isStreaming ? "assistant-copy--streaming" : ""}`}>
                             {message.content ? (
                               <ReactMarkdown
                                 remarkPlugins={[remarkGfm, remarkBreaks]}

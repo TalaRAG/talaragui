@@ -278,8 +278,9 @@
 .public-content--chat-only {
   flex: 1;
   min-height: 0;
-  padding: 2.5rem 3rem 9rem;
+  padding: 2.5rem 3rem 2rem;
   overflow: hidden;
+  gap: 1rem;
 }
 
 .hero-copy {
@@ -313,6 +314,7 @@
   flex: 1;
   min-height: 0;
   padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
   overflow-y: auto;
 }
 
@@ -355,6 +357,18 @@
   line-height: 1.8;
 }
 
+.assistant-copy--streaming::after {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 1.2rem;
+  margin-left: 0.18rem;
+  vertical-align: text-bottom;
+  background: variables.$primary;
+  border-radius: 999px;
+  animation: streaming-caret 1s ease-in-out infinite;
+}
+
 .assistant-copy p:last-child {
   margin-bottom: 0;
 }
@@ -386,11 +400,13 @@
 }
 
 .floating-composer {
-  position: absolute;
-  left: 3rem;
-  right: 3rem;
-  bottom: 1.25rem;
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
   z-index: 12;
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 .composer-card {
@@ -401,6 +417,7 @@
   padding: 0.75rem;
   box-shadow: variables.$shadow-float;
   backdrop-filter: blur(18px);
+  border: 1px solid rgba(236, 195, 0, 0.28);
 }
 
 .composer-card:focus-within {
@@ -545,7 +562,6 @@
 
 .soft-alert {
   max-width: 58rem;
-  margin-top: 1rem;
   padding: 0.9rem 1rem;
   border-radius: 1rem;
   color: #7c2535;
@@ -580,11 +596,11 @@
 }
 
 .composer-status {
-  margin-top: 0.9rem;
   padding: 0.85rem 1rem;
   border-radius: 1rem;
   background: rgba(255, 244, 211, 0.72);
   box-shadow: inset 0 0 0 1px rgba(236, 195, 0, 0.22);
+  flex-shrink: 0;
 }
 
 .assistant-thinking {
@@ -693,7 +709,7 @@
   }
 
   .public-content--chat-only {
-    padding: 1.25rem 1rem 10rem;
+    padding: 1.25rem 1rem 1rem;
   }
 
   .hero-copy {
@@ -709,8 +725,7 @@
   }
 
   .floating-composer {
-    left: 1rem;
-    right: 1rem;
+    margin-top: 0.5rem;
   }
 
   .composer-toolbar {
@@ -728,5 +743,15 @@
 
   .loading-banner {
     align-items: flex-start;
+  }
+}
+
+@keyframes streaming-caret {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
   }
 }
