@@ -4,7 +4,7 @@ import Layout from "../Layout";
 import AdminContent from "../../commons/AdminContent";
 import Loader from "../../commons/Loader";
 import ConfirmationModal from "../../commons/ConfirmationModal";
-import { deleteDocument, getDocument } from "../../services/DocumentsService";
+import { deleteDocument, getDocument, rerunDocument } from "../../services/DocumentsService";
 
 const formatSize = (sizeBytes) => {
   if (sizeBytes === null || sizeBytes === undefined) {
@@ -42,8 +42,11 @@ export default DocumentsShow = () => {
   const [document, setDocument] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isRerunning, setIsRerunning] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showRerunConfirm, setShowRerunConfirm] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const [rerunError, setRerunError] = useState("");
 
   const fetchDocument = () => {
     setIsLoading(true);
@@ -72,6 +75,22 @@ export default DocumentsShow = () => {
     });
   }
 
+  const handleRerun = () => {
+    setIsRerunning(true);
+    setRerunError("");
+
+    rerunDocument(documentId).then(() => {
+      setShowRerunConfirm(false);
+      setIsRerunning(false);
+      fetchDocument();
+    }).catch((payload) => {
+      console.log("Failed to re-run document processing");
+      console.log(payload.response);
+      setRerunError(payload.response?.data?.message || "Failed to queue the document for processing.");
+      setIsRerunning(false);
+    });
+  }
+
   useEffect(() => {
     fetchDocument();
   }, [documentId]);
@@ -81,6 +100,20 @@ export default DocumentsShow = () => {
       <AdminContent
         title="Document Details"
         headerActions={[
+          (
+            document?.status === "pending"
+              ? (
+                <button
+                  key="rerun-document"
+                  className="btn btn-sm btn-outline-secondary"
+                  disabled={isLoading || notFound}
+                  onClick={() => setShowRerunConfirm(true)}
+                >
+                  Re-run
+                </button>
+              )
+              : null
+          ),
           (
             document?.download_url
               ? (
@@ -123,6 +156,12 @@ export default DocumentsShow = () => {
         {!isLoading && notFound &&
           <div className="text-muted">
             Document not found.
+          </div>
+        }
+
+        {!isLoading && !notFound && rerunError &&
+          <div className="alert alert-danger">
+            {rerunError}
           </div>
         }
 
@@ -205,6 +244,18 @@ export default DocumentsShow = () => {
         onSecondaryClicked={() => {
           if (!isDeleting) {
             setShowConfirm(false);
+          }
+        }}
+      />
+      <ConfirmationModal
+        show={showRerunConfirm}
+        header="Re-run document"
+        content="Are you sure you want to queue this document again for embedding?"
+        isLoading={isRerunning}
+        onPrimaryClicked={handleRerun}
+        onSecondaryClicked={() => {
+          if (!isRerunning) {
+            setShowRerunConfirm(false);
           }
         }}
       />

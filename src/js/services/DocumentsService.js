@@ -111,3 +111,13 @@ export const deleteDocument = (documentId) => {
     }
   );
 }
+
+export const rerunDocument = (documentId) => {
+  return axios.post(
+    `${API_BASE_URL}/documents/${documentId}/rerun`,
+    {},
+    {
+      headers: buildHeaders()
+    }
+  );
+}
